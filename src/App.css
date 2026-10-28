@@ -103,8 +103,13 @@ button,
 
 .danger-button {
   background: var(--danger);
-  color: #ffffff;
+  color: var(--on-danger);
   box-shadow: var(--shadow-s);
+}
+
+/* Keep the recording lamp visible against the button background. */
+.danger-button .rec-dot {
+  background: currentColor;
 }
 
 .danger-button:hover:not(:disabled) {

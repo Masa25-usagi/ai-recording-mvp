@@ -136,7 +136,6 @@ function App() {
             type="button"
             className={isRecording ? 'danger-button' : 'primary-button'}
             disabled={isLoading}
-            aria-pressed={isRecording}
             onClick={isRecording ? stopRecording : startRecording}
           >
             {isRecording ? (

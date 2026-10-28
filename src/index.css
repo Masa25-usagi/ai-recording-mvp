@@ -20,6 +20,7 @@
   --danger: #d63636;
   --danger-strong: #b02424;
   --danger-soft: #fdecec;
+  --on-danger: #ffffff;
   --success: #177a4c;
   --success-soft: #e4f6ec;
   --info-text: #1f5685;
@@ -63,6 +64,7 @@
     --danger: #ff7a7a;
     --danger-strong: #ffb1b1;
     --danger-soft: #3a1d1d;
+    --on-danger: #3a0d0d;
     --success: #4ecb8d;
     --success-soft: #14332a;
     --info-text: #8fc1ea;
