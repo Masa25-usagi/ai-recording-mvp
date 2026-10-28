@@ -3,20 +3,105 @@
 }
 
 :root {
+  /* Color tokens (light) */
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface-subtle: #eef2f8;
+  --surface-hover: #e6edf7;
+  --border: #dce3ee;
+  --border-strong: #c2cede;
+  --text: #16202f;
+  --text-strong: #0d1522;
+  --text-muted: #5c6b83;
+  --primary: #175cff;
+  --primary-strong: #0d47d9;
+  --primary-soft: #e9efff;
+  --on-primary: #ffffff;
+  --danger: #d63636;
+  --danger-strong: #b02424;
+  --danger-soft: #fdecec;
+  --on-danger: #ffffff;
+  --success: #177a4c;
+  --success-soft: #e4f6ec;
+  --info-text: #1f5685;
+  --info-soft: #e9f3fe;
+
+  /* Shape & elevation */
+  --radius-s: 6px;
+  --radius-m: 10px;
+  --radius-l: 14px;
+  --shadow-s: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-m: 0 8px 22px rgba(16, 24, 40, 0.09);
+  --ring: 0 0 0 3px rgba(23, 92, 255, 0.28);
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  color-scheme: light;
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: #17202f;
-  background: #f7f8fb;
+  color: var(--text);
+  background: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e131c;
+    --surface: #151c29;
+    --surface-subtle: #1a2232;
+    --surface-hover: #212b3f;
+    --border: #2a3548;
+    --border-strong: #3b4b65;
+    --text: #e5eaf3;
+    --text-strong: #f4f7fc;
+    --text-muted: #9aa9c0;
+    --primary: #6b9bff;
+    --primary-strong: #8fb2ff;
+    --primary-soft: #1c2b4c;
+    --on-primary: #0b1526;
+    --danger: #ff7a7a;
+    --danger-strong: #ffb1b1;
+    --danger-soft: #3a1d1d;
+    --on-danger: #3a0d0d;
+    --success: #4ecb8d;
+    --success-soft: #14332a;
+    --info-text: #8fc1ea;
+    --info-soft: #16283d;
+    --shadow-s: 0 1px 2px rgba(0, 0, 0, 0.35);
+    --shadow-m: 0 8px 22px rgba(0, 0, 0, 0.4);
+    --ring: 0 0 0 3px rgba(107, 155, 255, 0.4);
+    color-scheme: dark;
+  }
+}
+
 body {
   margin: 0;
+  background: var(--bg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--primary-soft);
+  color: var(--text-strong);
 }
 
 #root {
   min-height: 100vh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

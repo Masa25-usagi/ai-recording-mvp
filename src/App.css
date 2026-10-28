@@ -2,8 +2,14 @@
   min-height: 100vh;
   display: grid;
   grid-template-columns: 390px 1fr;
-  background: #f7f8fb;
-  color: #17202f;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* While recording, the sidebar gets a persistent accent strip so the
+   state is visible at a glance without shifting layout. */
+.app-shell.is-recording .sidebar {
+  box-shadow: inset 0 4px 0 var(--danger);
 }
 
 .sidebar {
@@ -11,8 +17,8 @@
   flex-direction: column;
   gap: 24px;
   padding: 32px;
-  background: #ffffff;
-  border-right: 1px solid #dde3ed;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
 }
 
 .eyebrow,
@@ -27,16 +33,17 @@
 }
 
 .eyebrow {
-  color: #59708f;
+  color: var(--text-muted);
   font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 h1,
 h2 {
   margin: 0;
-  letter-spacing: 0;
-  color: #101725;
+  letter-spacing: -0.02em;
+  color: var(--text-strong);
 }
 
 h1 {
@@ -68,27 +75,69 @@ button,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  border: 0;
+  gap: 8px;
+  border-radius: var(--radius-m);
+  border: 1px solid transparent;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
+  transition:
+    background-color 0.18s var(--ease),
+    border-color 0.18s var(--ease),
+    box-shadow 0.18s var(--ease),
+    color 0.18s var(--ease),
+    transform 0.18s var(--ease);
 }
 
 .primary-button {
-  background: #175cff;
-  color: #ffffff;
+  background: var(--primary);
+  color: var(--on-primary);
+  box-shadow: var(--shadow-s);
+}
+
+.primary-button:hover:not(:disabled) {
+  background: var(--primary-strong);
+  box-shadow: var(--shadow-m);
+  transform: translateY(-1px);
 }
 
 .danger-button {
-  background: #c93434;
-  color: #ffffff;
+  background: var(--danger);
+  color: var(--on-danger);
+  box-shadow: var(--shadow-s);
+}
+
+/* Keep the recording lamp visible against the button background. */
+.danger-button .rec-dot {
+  background: currentColor;
+}
+
+.danger-button:hover:not(:disabled) {
+  background: var(--danger-strong);
+  box-shadow: var(--shadow-m);
+  transform: translateY(-1px);
+}
+
+/* Pulsing ring on the stop button while a recording is in progress. */
+.app-shell.is-recording .danger-button {
+  animation: rec-button-pulse 1.6s var(--ease) infinite;
 }
 
 .file-button {
-  color: #17202f;
-  background: #edf2fa;
-  border: 1px solid #d7dfec;
+  color: var(--text);
+  background: var(--surface-subtle);
+  border-color: var(--border);
+}
+
+.file-button:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+}
+
+.primary-button:active:not(:disabled),
+.danger-button:active:not(:disabled),
+.file-button:active {
+  transform: translateY(0);
 }
 
 .file-button input {
@@ -102,18 +151,59 @@ button,
   cursor: not-allowed;
 }
 
+/* Live recording banner (rendered only while isRecording is true). */
+.recording-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-m);
+  background: var(--danger-soft);
+  color: var(--danger-strong);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.rec-dot {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--danger);
+  animation: rec-pulse 1.4s var(--ease) infinite;
+}
+
 .status {
-  padding: 12px;
-  border-radius: 8px;
-  background: #eef6ff;
-  color: #24547d;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  background: var(--info-soft);
+  color: var(--info-text);
+}
+
+.status::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  flex: 0 0 auto;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
 
 .error {
-  padding: 12px;
-  border-radius: 8px;
-  background: #fff0f0;
-  color: #9f2424;
+  padding: 12px 14px;
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-m);
+  background: var(--danger-soft);
+  color: var(--danger-strong);
 }
 
 .recording-list {
@@ -130,11 +220,20 @@ button,
   display: grid;
   gap: 6px;
   text-align: left;
-  background: #f6f8fc;
+  background: var(--surface-subtle);
   border: 1px solid transparent;
-  border-radius: 8px;
-  color: #17202f;
+  border-radius: var(--radius-m);
+  color: var(--text);
   cursor: pointer;
+  transition:
+    background-color 0.18s var(--ease),
+    border-color 0.18s var(--ease),
+    box-shadow 0.18s var(--ease);
+}
+
+.recording:hover {
+  background: var(--surface-hover);
+  border-color: var(--border);
 }
 
 .recording span {
@@ -146,12 +245,21 @@ button,
 .recording small,
 .muted,
 .empty {
-  color: #66758e;
+  color: var(--text-muted);
 }
 
 .recording.selected {
-  background: #edf4ff;
-  border-color: #175cff;
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  box-shadow: inset 3px 0 0 var(--primary);
+}
+
+.empty {
+  padding: 20px 16px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-m);
+  background: var(--surface-subtle);
+  text-align: center;
 }
 
 .workspace {
@@ -170,17 +278,30 @@ button,
 }
 
 .processed {
-  padding: 6px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
   border-radius: 999px;
-  background: #e8f7ef;
-  color: #17613c;
+  background: var(--success-soft);
+  color: var(--success);
   font-size: 12px;
   font-weight: 800;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+.processed::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
 }
 
 .player {
   width: 100%;
+  border-radius: var(--radius-m);
 }
 
 .transcript {
@@ -194,9 +315,18 @@ button,
   grid-template-columns: 112px 1fr;
   gap: 16px;
   padding: 18px;
-  background: #ffffff;
-  border: 1px solid #dde3ed;
-  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-s);
+  transition:
+    border-color 0.18s var(--ease),
+    box-shadow 0.18s var(--ease);
+}
+
+.utterance:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-m);
 }
 
 .speaker {
@@ -204,17 +334,27 @@ button,
   padding: 8px 10px;
   display: grid;
   gap: 3px;
-  border: 1px solid #d7dfec;
-  border-radius: 8px;
-  background: #f5f8fc;
-  color: #26384f;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  background: var(--surface-subtle);
+  color: var(--text);
   font-size: 13px;
   font-weight: 800;
   cursor: pointer;
+  transition:
+    background-color 0.18s var(--ease),
+    border-color 0.18s var(--ease),
+    color 0.18s var(--ease);
+}
+
+.speaker:hover {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  color: var(--primary-strong);
 }
 
 .speaker span {
-  color: #66758e;
+  color: var(--text-muted);
   font-size: 12px;
   font-weight: 700;
 }
@@ -223,34 +363,76 @@ button,
 .plain-transcript,
 .welcome p {
   margin: 0;
-  color: #27364c;
+  color: var(--text);
   font-size: 17px;
   line-height: 1.85;
 }
 
 .word {
   margin: 0 2px 0 0;
-  padding: 1px 2px;
+  padding: 1px 3px;
   border: 0;
-  border-radius: 4px;
+  border-radius: var(--radius-s);
   background: transparent;
   color: inherit;
   cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+  transition:
+    background-color 0.15s var(--ease),
+    text-decoration-color 0.15s var(--ease);
 }
 
 .word:hover,
 .word:focus-visible {
-  background: #dfeaff;
+  background: var(--primary-soft);
+  text-decoration-color: var(--primary);
   outline: none;
+}
+
+.word:focus-visible {
+  box-shadow: var(--ring);
 }
 
 .welcome {
   max-width: 520px;
   margin: auto;
   padding: 36px;
-  background: #ffffff;
-  border: 1px solid #dde3ed;
-  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-s);
+}
+
+.welcome h2 {
+  margin-bottom: 10px;
+}
+
+@keyframes rec-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(214, 54, 54, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 7px rgba(214, 54, 54, 0);
+  }
+}
+
+@keyframes rec-button-pulse {
+  0%,
+  100% {
+    box-shadow: var(--shadow-s), 0 0 0 0 rgba(214, 54, 54, 0.4);
+  }
+  50% {
+    box-shadow: var(--shadow-s), 0 0 0 8px rgba(214, 54, 54, 0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 860px) {
@@ -259,8 +441,13 @@ button,
   }
 
   .sidebar {
+    padding: 24px 20px;
     border-right: 0;
-    border-bottom: 1px solid #dde3ed;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .app-shell.is-recording .sidebar {
+    box-shadow: inset 0 -4px 0 var(--danger);
   }
 
   .workspace {
@@ -269,5 +456,25 @@ button,
 
   .utterance {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  h1 {
+    font-size: 26px;
+  }
+
+  h2 {
+    font-size: 21px;
+  }
+
+  .workspace {
+    padding: 16px;
+  }
+
+  .detail-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
 }
