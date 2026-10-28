@@ -124,7 +124,7 @@ function App() {
   }
 
   return (
-    <main className="app-shell">
+    <main className={isRecording ? 'app-shell is-recording' : 'app-shell'}>
       <section className="sidebar" aria-label="録音一覧">
         <div>
           <p className="eyebrow">AI Recording MVP</p>
@@ -136,9 +136,17 @@ function App() {
             type="button"
             className={isRecording ? 'danger-button' : 'primary-button'}
             disabled={isLoading}
+            aria-pressed={isRecording}
             onClick={isRecording ? stopRecording : startRecording}
           >
-            {isRecording ? '録音を停止' : 'ブラウザで録音'}
+            {isRecording ? (
+              <>
+                <span className="rec-dot" aria-hidden="true" />
+                録音を停止
+              </>
+            ) : (
+              'ブラウザで録音'
+            )}
           </button>
 
           <label className="file-button">
@@ -155,6 +163,13 @@ function App() {
             />
           </label>
         </div>
+
+        {isRecording ? (
+          <p className="recording-banner" role="status">
+            <span className="rec-dot" aria-hidden="true" />
+            録音中です。停止すると自動で文字起こしを開始します。
+          </p>
+        ) : null}
 
         {isLoading ? <p className="status">Deepgramで文字起こし中です。</p> : null}
         {error ? <p className="error">{error}</p> : null}
